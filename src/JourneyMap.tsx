@@ -35,11 +35,13 @@ export default function JourneyMap({ activeId, regionFilter, onSelect }: Props) 
       attributionControl: true,
     }).setView([36.5, 138.0], 5);
 
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
-      attribution: "&copy; OpenStreetMap &copy; CARTO",
-      subdomains: "abcd",
-      maxZoom: 18,
-    }).addTo(map);
+    L.tileLayer(
+      "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
+      {
+        attribution: "Tiles &copy; Esri",
+        maxZoom: 18,
+      },
+    ).addTo(map);
 
     layerRef.current = L.layerGroup().addTo(map);
     mapRef.current = map;
