@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { fallbackBasemap, primaryBasemap } from "./basemap";
 import { japanBounds, regionOf, regions, stops, stopsByRegion } from "./journey";
 import { vodEpisodes } from "./vod";
 
@@ -71,5 +72,14 @@ describe("NHK VOD catalog", () => {
   it("keeps the Japan journey separate from the Taiwan special", () => {
     expect(vodEpisodes.some((e) => e.japan)).toBe(true);
     expect(vodEpisodes.some((e) => !e.japan && e.title.includes("Taiwan"))).toBe(true);
+  });
+});
+
+describe("basemap", () => {
+  it("uses key-free Japan tiles, never Carto", () => {
+    expect(primaryBasemap.url).toContain("cyberjapandata.gsi.go.jp");
+    expect(fallbackBasemap.url).toContain("arcgisonline.com");
+    expect(primaryBasemap.url.toLowerCase()).not.toContain("carto");
+    expect(fallbackBasemap.url.toLowerCase()).not.toContain("carto");
   });
 });

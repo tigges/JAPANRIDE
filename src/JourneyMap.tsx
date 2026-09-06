@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { fallbackBasemap, primaryBasemap } from "./data/basemap";
 import { regionOf, regions, stops, type RegionId, type Stop } from "./data/journey";
 
 type Props = {
@@ -35,13 +36,21 @@ export default function JourneyMap({ activeId, regionFilter, onSelect }: Props) 
       attributionControl: true,
     }).setView([36.5, 138.0], 5);
 
-    L.tileLayer(
-      "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
-      {
-        attribution: "Tiles &copy; Esri",
-        maxZoom: 18,
-      },
-    ).addTo(map);
+    const primary = L.tileLayer(primaryBasemap.url, {
+      attribution: primaryBasemap.attribution,
+      maxZoom: primaryBasemap.maxZoom,
+    }).addTo(map);
+
+    let usedFallback = false;
+    primary.on("tileerror", () => {
+      if (usedFallback) return;
+      usedFallback = true;
+      map.removeLayer(primary);
+      L.tileLayer(fallbackBasemap.url, {
+        attribution: fallbackBasemap.attribution,
+        maxZoom: fallbackBasemap.maxZoom,
+      }).addTo(map);
+    });
 
     layerRef.current = L.layerGroup().addTo(map);
     mapRef.current = map;
