@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import JourneyMap from "./JourneyMap";
+import { MAP_LANG_KEY, basemaps, isBasemapId, type BasemapId } from "./data/basemap";
 import {
   NHK_SHOW,
   regionOf,
@@ -18,6 +19,23 @@ function formatMins(sec: number): string {
 export default function App() {
   const [activeId, setActiveId] = useState(stops[0]?.id ?? "shiretoko");
   const [regionFilter, setRegionFilter] = useState<RegionId | "all">("all");
+  const [mapLang, setMapLang] = useState<BasemapId>(() => {
+    try {
+      const saved = localStorage.getItem(MAP_LANG_KEY);
+      return isBasemapId(saved) ? saved : "en";
+    } catch {
+      return "en";
+    }
+  });
+
+  function chooseMapLang(id: BasemapId) {
+    setMapLang(id);
+    try {
+      localStorage.setItem(MAP_LANG_KEY, id);
+    } catch {
+      /* ignore */
+    }
+  }
 
   const list = useMemo(
     () => (regionFilter === "all" ? stops : stopsByRegion(regionFilter)),
@@ -117,30 +135,52 @@ export default function App() {
           </p>
         </div>
 
-        <div className="region-pills" role="tablist" aria-label="Filter journey by region">
-          <button
-            className={regionFilter === "all" ? "pill on" : "pill"}
-            onClick={() => setRegionFilter("all")}
-          >
-            Full Japan
-          </button>
-          {regions.map((r) => (
+        <div className="map-toolbar">
+          <div className="region-pills" role="tablist" aria-label="Filter journey by region">
             <button
-              key={r.id}
-              className={regionFilter === r.id ? "pill on" : "pill"}
-              onClick={() => {
-                setRegionFilter(r.id);
-                const first = stopsByRegion(r.id)[0];
-                if (first) setActiveId(first.id);
-              }}
+              className={regionFilter === "all" ? "pill on" : "pill"}
+              onClick={() => setRegionFilter("all")}
             >
-              {r.name}
+              Full Japan
             </button>
-          ))}
+            {regions.map((r) => (
+              <button
+                key={r.id}
+                className={regionFilter === r.id ? "pill on" : "pill"}
+                onClick={() => {
+                  setRegionFilter(r.id);
+                  const first = stopsByRegion(r.id)[0];
+                  if (first) setActiveId(first.id);
+                }}
+              >
+                {r.name}
+              </button>
+            ))}
+          </div>
+          <div className="lang-pills" role="radiogroup" aria-label="Map labels">
+            <span className="lang-label">Map labels</span>
+            {(Object.keys(basemaps) as BasemapId[]).map((id) => (
+              <button
+                key={id}
+                type="button"
+                role="radio"
+                aria-checked={mapLang === id}
+                className={mapLang === id ? "pill on" : "pill"}
+                onClick={() => chooseMapLang(id)}
+              >
+                {basemaps[id].label}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="map-layout">
-          <JourneyMap activeId={active.id} regionFilter={regionFilter} onSelect={setActiveId} />
+          <JourneyMap
+            activeId={active.id}
+            regionFilter={regionFilter}
+            mapLang={mapLang}
+            onSelect={setActiveId}
+          />
           <aside className="stop-panel">
             <p className="stop-kicker">
               {regionOf(active.region).kana} · {active.year}

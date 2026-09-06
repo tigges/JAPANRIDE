@@ -19,3 +19,5 @@ Open http://localhost:5173
 ## What it maps
 
 Nine chapters from Shiretoko to Yaeyama, drawn from twelve years of rides (Hokkaido, Tohoku, Hokuriku, Kanto, Alps & Fuji, Kansai & Kii, Seto & San'in, Kyushu, Nansei Islands). Current NHK WORLD VOD episodes are linked out so you can watch from the map.
+
+The map has **English** (Esri World Topo) and **日本語** (GSI pale) label modes. English is the default.

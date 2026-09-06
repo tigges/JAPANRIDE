@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { fallbackBasemap, primaryBasemap } from "./data/basemap";
+import { basemaps, type BasemapId } from "./data/basemap";
 import { regionOf, regions, stops, type RegionId, type Stop } from "./data/journey";
 
 type Props = {
   activeId: string;
   regionFilter: RegionId | "all";
+  mapLang: BasemapId;
   onSelect: (id: string) => void;
 };
 
@@ -14,10 +15,11 @@ function visibleStops(filter: RegionId | "all"): Stop[] {
   return filter === "all" ? stops : stops.filter((s) => s.region === filter);
 }
 
-export default function JourneyMap({ activeId, regionFilter, onSelect }: Props) {
+export default function JourneyMap({ activeId, regionFilter, mapLang, onSelect }: Props) {
   const mapEl = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
   const layerRef = useRef<L.LayerGroup | null>(null);
+  const tileRef = useRef<L.TileLayer | null>(null);
   const skipPan = useRef(true);
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
@@ -36,30 +38,32 @@ export default function JourneyMap({ activeId, regionFilter, onSelect }: Props) 
       attributionControl: true,
     }).setView([36.5, 138.0], 5);
 
-    const primary = L.tileLayer(primaryBasemap.url, {
-      attribution: primaryBasemap.attribution,
-      maxZoom: primaryBasemap.maxZoom,
-    }).addTo(map);
-
-    let usedFallback = false;
-    primary.on("tileerror", () => {
-      if (usedFallback) return;
-      usedFallback = true;
-      map.removeLayer(primary);
-      L.tileLayer(fallbackBasemap.url, {
-        attribution: fallbackBasemap.attribution,
-        maxZoom: fallbackBasemap.maxZoom,
-      }).addTo(map);
-    });
-
     layerRef.current = L.layerGroup().addTo(map);
     mapRef.current = map;
 
     return () => {
       map.remove();
       mapRef.current = null;
+      tileRef.current = null;
     };
   }, []);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    if (tileRef.current) {
+      map.removeLayer(tileRef.current);
+      tileRef.current = null;
+    }
+
+    const spec = basemaps[mapLang];
+    const tiles = L.tileLayer(spec.url, {
+      attribution: spec.attribution,
+      maxZoom: spec.maxZoom,
+    }).addTo(map);
+    tileRef.current = tiles;
+  }, [mapLang]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -117,12 +121,19 @@ export default function JourneyMap({ activeId, regionFilter, onSelect }: Props) 
 
   return (
     <div className="map-shell">
-      <div ref={mapEl} className="map-canvas" role="application" aria-label="Japan bike journey map" />
+      <div
+        ref={mapEl}
+        className="map-canvas"
+        role="application"
+        aria-label={
+          mapLang === "en" ? "Japan bike journey map, English labels" : "Japan bike journey map, Japanese labels"
+        }
+      />
       <div className="map-legend">
         {regions.map((r) => (
           <span key={r.id} className="legend-item">
             <i style={{ background: r.color }} />
-            {r.kana}
+            {mapLang === "en" ? r.name : r.kana}
           </span>
         ))}
       </div>

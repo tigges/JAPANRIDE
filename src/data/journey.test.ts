@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { fallbackBasemap, primaryBasemap } from "./basemap";
+import { basemaps } from "./basemap";
 import { japanBounds, regionOf, regions, stops, stopsByRegion } from "./journey";
 import { vodEpisodes } from "./vod";
 
@@ -76,10 +76,12 @@ describe("NHK VOD catalog", () => {
 });
 
 describe("basemap", () => {
-  it("uses key-free Japan tiles, never Carto", () => {
-    expect(primaryBasemap.url).toContain("cyberjapandata.gsi.go.jp");
-    expect(fallbackBasemap.url).toContain("arcgisonline.com");
-    expect(primaryBasemap.url.toLowerCase()).not.toContain("carto");
-    expect(fallbackBasemap.url.toLowerCase()).not.toContain("carto");
+  it("offers English and Japanese key-free tiles, never Carto", () => {
+    expect(basemaps.en.url).toContain("arcgisonline.com");
+    expect(basemaps.ja.url).toContain("cyberjapandata.gsi.go.jp");
+    expect(basemaps.en.label).toBe("English");
+    expect(basemaps.ja.label).toBe("日本語");
+    expect(basemaps.en.url.toLowerCase()).not.toContain("carto");
+    expect(basemaps.ja.url.toLowerCase()).not.toContain("carto");
   });
 });

@@ -245,11 +245,29 @@ img {
   padding: 4.5rem 6vw;
 }
 
-.region-pills {
+.map-toolbar {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.2rem;
   margin-bottom: 1.4rem;
+}
+
+.region-pills,
+.lang-pills {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.lang-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-right: 0.15rem;
 }
 
 .pill {
