@@ -3,6 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "description": "JAPANRIDE — one north-to-south Japan bike journey mapped from Cycle Around Japan.",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build && cp dist/index.html dist/404.html && touch dist/.nojekyll",
@@ -24,5 +25,8 @@
     "typescript": "^5.9.2",
     "vite": "^7.1.5",
     "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

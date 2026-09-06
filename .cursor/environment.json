@@ -1,4 +1,5 @@
 {
+  "name": "JAPANRIDE",
   "install": "npm ci",
   "start": "npm run dev -- --host 0.0.0.0 --port 5173",
   "terminals": [
@@ -6,5 +7,8 @@
       "name": "web",
       "command": "npm run dev -- --host 0.0.0.0 --port 5173"
     }
+  ],
+  "ports": [
+    { "name": "web", "port": 5173 }
   ]
 }
