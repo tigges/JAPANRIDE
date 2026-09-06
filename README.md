@@ -2,6 +2,8 @@
 
 A landing page that stitches [NHK WORLD-JAPAN *Cycle Around Japan*](https://www3.nhk.or.jp/nhkworld/en/shows/cycle/) into **one north-to-south Japan bike journey**.
 
+**Live:** [https://japanride.pages.dev/](https://japanride.pages.dev/)
+
 Episode titles, stills, and short descriptions come from the official catalog and listings. This site is an unofficial companion map, not affiliated with NHK.
 
 ## Run
