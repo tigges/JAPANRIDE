@@ -1,10 +1,9 @@
 node_modules/
 dist/
 build/
-*.log
 .DS_Store
+*.log
+.vite
+coverage/
 .env
 .env.local
-coverage/
-server/dist/
-client/dist/
