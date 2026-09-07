@@ -24,6 +24,6 @@ The map has **English** (Esri World Topo) and **日本語** (GSI pale) label mod
 
 Overview links between hubs are **color-coded jumps**: vermillion ride, gold train, purple ferry, grey flight — so the catalog does not look like one continuous GPS ride.
 
-Six hubs open a **color-coded episode map** (Izu, Boso, Tsukuba, Biwa, Shimanami, Goto): lake, coast, pass, island, ferry, flight, overnight. Official National Cycle Routes show as a teal underlay where the ride is on them.
+Thirteen hubs open a **color-coded episode map** (Tokachi/Kushiro, Aomori, Toyama, Noto, Sado, Izu, Boso, Tsukuba, Biwa, Okayama, Shimanami, Oita, Goto): lake, coast, pass, island, ferry, flight, overnight. Official cycle routes show as a teal underlay where the ride is on them. Noto opens from both Kanazawa and Wajima.
 
 Later, an original **JapanRide** traverse can sit as its own layer (`japanride`) on the official network, optionally splicing NHK episode days as detours — not as a replacement for this overview.
