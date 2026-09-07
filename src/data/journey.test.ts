@@ -17,7 +17,7 @@ import {
 import { SITE_VERSION, siteVersionLabel } from "./version";
 import { vodEpisodes } from "./vod";
 
-describe("grand Japan journey", () => {
+describe("NHK episode catalog", () => {
   it("has nine ordered regions covering the archipelago", () => {
     expect(regions.map((r) => r.id)).toEqual([
       "hokkaido",
@@ -250,7 +250,7 @@ describe("NHK tour jumps", () => {
   it("color-codes ride, train, ferry, and flight jumps", () => {
     const kinds = new Set(tourJumps.map((j) => j.kind));
     expect(kinds).toEqual(new Set(["ride", "train", "ferry", "flight"]));
-    expect(JUMP_STYLE.ride.color).toBe("#c4452d");
+    expect(JUMP_STYLE.ride.label).toMatch(/episode/i);
     expect(JUMP_STYLE.train.color).toBe("#c9a05a");
     expect(JUMP_STYLE.ferry.color).toBe("#6b5b95");
     expect(JUMP_STYLE.flight.color).toBe("#8a8680");

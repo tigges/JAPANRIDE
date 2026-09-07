@@ -10,15 +10,16 @@ export type TourJump = {
   to: string;
   kind: JumpKind;
   note: string;
-  /** Island packages hang off a gateway; they are not mainland spine. */
+  /** Island episodes hang off a gateway; they are not consecutive mainland hops. */
   islandAccess?: boolean;
 };
 
 export const JUMP_KINDS: JumpKind[] = ["ride", "train", "ferry", "flight"];
 
 /**
- * Mainland story spine — ends at Kagoshima. Southwestern (and other) island
- * episodes are separate trips reached by ferry or flight.
+ * Mainland hub sequence for drawing hops between neighboring NHK episodes.
+ * Ends at Kagoshima. Southwestern (and other) island episodes are separate
+ * NHK trips reached by ferry or flight — not a grand tour of Japan.
  */
 export const SPINE_IDS = [
   "shiretoko",
@@ -88,7 +89,7 @@ export const JUMP_STYLE: Record<
   JumpKind,
   { color: string; dash: string; label: string; weight: number }
 > = {
-  ride: { color: "#c4452d", dash: "7 8", label: "Ride between tours", weight: 3 },
+  ride: { color: "#c4452d", dash: "7 8", label: "Ride between episodes", weight: 3 },
   train: { color: "#c9a05a", dash: "2 8", label: "Train jump", weight: 3 },
   ferry: { color: "#6b5b95", dash: "8 7", label: "Ferry jump", weight: 3 },
   flight: { color: "#8a8680", dash: "1 10", label: "Flight jump", weight: 2 },

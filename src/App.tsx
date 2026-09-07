@@ -125,7 +125,7 @@ export default function App() {
           </span>
         </div>
         <nav>
-          <a href="#map">Journey</a>
+          <a href="#map">Map</a>
           <a href="#chapters">Chapters</a>
           <a href="#watch">Watch</a>
           <a href="#ride">Ride notes</a>
@@ -143,18 +143,17 @@ export default function App() {
         />
         <div className="hero-veil" />
         <div className="hero-copy">
-          <p className="eyebrow">Mapped from NHK WORLD-JAPAN · Cycle Around Japan</p>
+          <p className="eyebrow">Unofficial companion · NHK WORLD-JAPAN Cycle Around Japan</p>
           <h1>
-            One island chain.
-            <em> Many NHK tours. </em>
-            One future ride of our own.
+            NHK episode rides,
+            <em> mapped and watchable. </em>
           </h1>
           <p className="lede">
-            Cycle Around Japan is a library of tours, not one GPS line. This unofficial
-            companion maps a land spine from Shiretoko to Kagoshima, then the island
-            trips you reach by ferry or flight — so a future original JapanRide can
-            borrow the geography without pretending the series was a single week in
-            the saddle.
+            This project maps and details the bicycle rides from Cycle Around Japan —
+            every episode hub from Hokkaido to Yaeyama. Full Japan still shows all the
+            rides and how you can get from one to the next. It is not a grand tour of
+            Japan; that is a separate project. Open a hub for the episode days when we
+            have them, then watch the segment on the official NHK site when it is listed.
           </p>
           <div className="hero-actions">
             <a className="btn primary" href="#map">
@@ -167,7 +166,7 @@ export default function App() {
         </div>
       </section>
 
-      <section className="stats" aria-label="Journey figures">
+      <section className="stats" aria-label="Series figures">
         <div>
           <b>{stats.years}</b>
           <span>on air</span>
@@ -192,18 +191,20 @@ export default function App() {
 
       <section className="map-section" id="map">
         <div className="section-head">
-          <p className="eyebrow">The catalog, not one GPS line</p>
-          <h2>Shiretoko → Kagoshima, plus island trips</h2>
+          <p className="eyebrow">Every NHK ride on one map</p>
+          <h2>All the rides, and how you get from one to the next</h2>
           <p>
-            Lines between hubs are color-coded jumps: vermillion ride, gold train,
-            purple ferry, grey flight. Island packages (Sado, Niijima, Goto, Yakushima,
-            Amami, Okinawa, Miyako, Yaeyama) hang off gateways — they are not stages of
-            the land spine. Hubs marked route open a color-coded episode map.
+            Full Japan shows every Cycle Around Japan hub. Colored lines are hops
+            between episodes — vermillion ride, gold train, purple ferry, grey flight —
+            not one continuous tour. Island episodes (Sado, Niijima, Goto, Yakushima,
+            Amami, Okinawa, Miyako, Yaeyama) hang off ferry or flight gateways. Hubs
+            marked route open a color-coded episode map. Watch this ride opens NHK
+            WORLD when that segment is listed.
           </p>
         </div>
 
         <div className="map-toolbar">
-          <div className="region-pills" role="tablist" aria-label="Filter journey by region">
+          <div className="region-pills" role="tablist" aria-label="Filter rides by region">
             <button
               className={regionFilter === "all" ? "pill on" : "pill"}
               onClick={() => chooseRegion("all")}
@@ -249,7 +250,7 @@ export default function App() {
           <aside className="stop-panel">
             <p className="stop-kicker">
               {regionOf(active.region).kana} · {active.year}
-              {isIslandTrip(active.id) ? " · Island trip" : " · Land spine"}
+              {isIslandTrip(active.id) ? " · Island episode" : " · Mainland episode"}
               {hasItinerary(active.id) ? " · Detailed ride" : ""}
             </p>
             <h3>{active.name}</h3>
@@ -285,7 +286,7 @@ export default function App() {
                     setDayId("all");
                   }}
                 >
-                  Japan overview
+                  All rides
                 </button>
               </div>
             ) : null}
@@ -363,7 +364,7 @@ export default function App() {
                 Watch this ride
               </a>
             ) : (
-              <p className="muted">Full episode rotates on NHK WORLD VOD.</p>
+              <p className="muted">This segment is not on NHK WORLD VOD right now — availability rotates.</p>
             )}
             <ol className="stop-list">
               {list.map((stop, i) => (
@@ -393,8 +394,8 @@ export default function App() {
 
       <section className="chapters" id="chapters">
         <div className="section-head">
-          <p className="eyebrow">Nine chapters, two kinds of trip</p>
-          <h2>Land spine, then island packages</h2>
+          <p className="eyebrow">Nine chapters of episode rides</p>
+          <h2>Mainland rides and island episodes</h2>
         </div>
         <div className="chapter-grid">
           {regions.map((region, i) => {
@@ -424,10 +425,11 @@ export default function App() {
       <section className="watch" id="watch">
         <div className="section-head">
           <p className="eyebrow">On NHK WORLD now</p>
-          <h2>Stream the current rides</h2>
+          <h2>Watch each ride on the official site</h2>
           <p>
             Titles, stills, and captions come from the official Cycle Around Japan catalog.
-            Availability rotates — open NHK WORLD-JAPAN to play.
+            Availability rotates — Watch this ride on a hub, or open a card here, to play
+            on NHK WORLD-JAPAN when that segment is listed.
           </p>
         </div>
         <div className="vod-grid">
@@ -447,7 +449,7 @@ export default function App() {
         <div className="taiwan">
           <h3>Sister ride — Cycle Around Taiwan</h3>
           <p>
-            Three 2025 specials leave the Japan traverse for Taipei, indigenous east-coast
+            Three 2025 specials leave Japan for Taipei, indigenous east-coast
             roads, and the island's southern tip.
           </p>
           <div className="vod-row">
@@ -492,11 +494,12 @@ export default function App() {
             </p>
           </article>
           <article>
-            <h3>Island packages stay packages</h3>
+            <h3>Island episodes stay episodes</h3>
             <p>
               Sado, the Izu islands, Goto, Yakushima, Amami, and the Ryukyus are their
-              own NHK trips — ferry or flight from a gateway, then a loop. They are
-              inspiration for later, not stages of a land tour that ends at Kagoshima.
+              own NHK trips — ferry or flight from a gateway, then a loop. This map
+              shows how you reach them from neighboring episode hubs; they are not
+              stages of a grand tour.
             </p>
           </article>
         </div>
@@ -511,8 +514,9 @@ export default function App() {
         <div>
           <strong>JAPANRIDE</strong>
           <p>
-            An unofficial companion map. Not affiliated with NHK. Episode titles, stills, and
-            descriptions belong to NHK WORLD-JAPAN. Watch the series on the official site.
+            An unofficial map of Cycle Around Japan episode rides. Not affiliated with
+            NHK. Episode titles, stills, and descriptions belong to NHK WORLD-JAPAN.
+            Watch each segment on the official site when it is available.
           </p>
           <p className="site-version-foot">Site version {SITE_VERSION}</p>
         </div>

@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "JAPANRIDE — unofficial Cycle Around Japan companion: land spine to Kagoshima, island trips apart.",
+  "description": "JAPANRIDE — unofficial map of NHK Cycle Around Japan episode rides, with hops between hubs and watch links.",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build && cp dist/index.html dist/404.html && touch dist/.nojekyll",
