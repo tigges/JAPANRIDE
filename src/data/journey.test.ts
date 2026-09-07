@@ -14,6 +14,7 @@ import {
   spineJumps,
   tourJumps,
 } from "./connectors";
+import { SITE_VERSION, siteVersionLabel } from "./version";
 import { vodEpisodes } from "./vod";
 
 describe("grand Japan journey", () => {
@@ -86,6 +87,14 @@ describe("NHK VOD catalog", () => {
   it("keeps the Japan journey separate from the Taiwan special", () => {
     expect(vodEpisodes.some((e) => e.japan)).toBe(true);
     expect(vodEpisodes.some((e) => !e.japan && e.title.includes("Taiwan"))).toBe(true);
+  });
+});
+
+describe("site version", () => {
+  it("is a positive integer that ticks with each git step", () => {
+    expect(Number.isInteger(SITE_VERSION)).toBe(true);
+    expect(SITE_VERSION).toBeGreaterThan(0);
+    expect(siteVersionLabel()).toBe(`v${SITE_VERSION}`);
   });
 });
 

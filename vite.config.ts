@@ -1,5 +1,9 @@
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
+import { computeSiteVersion } from "./siteVersion";
+
+const siteVersion = computeSiteVersion();
+process.env.VITE_SITE_VERSION = String(siteVersion);
 
 export default defineConfig({
   base: process.env.BASE_PATH || "/",

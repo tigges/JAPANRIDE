@@ -19,6 +19,7 @@ import {
   stopsByRegion,
   type RegionId,
 } from "./data/journey";
+import { SITE_VERSION, siteVersionLabel } from "./data/version";
 import { heroImages, vodEpisodes } from "./data/vod";
 
 function formatMins(sec: number): string {
@@ -115,9 +116,14 @@ export default function App() {
   return (
     <div className="page">
       <header className="nav">
-        <a className="wordmark" href="#top">
-          JAPANRIDE
-        </a>
+        <div className="brand">
+          <a className="wordmark" href="#top">
+            JAPANRIDE
+          </a>
+          <span className="site-version" title="Increments with each site change">
+            {siteVersionLabel()}
+          </span>
+        </div>
         <nav>
           <a href="#map">Journey</a>
           <a href="#chapters">Chapters</a>
@@ -508,6 +514,7 @@ export default function App() {
             An unofficial companion map. Not affiliated with NHK. Episode titles, stills, and
             descriptions belong to NHK WORLD-JAPAN. Watch the series on the official site.
           </p>
+          <p className="site-version-foot">Site version {SITE_VERSION}</p>
         </div>
         <a className="btn ghost" href={NHK_SHOW} target="_blank" rel="noreferrer">
           Cycle Around Japan ↗
