@@ -247,25 +247,19 @@ export default function App() {
             dayId={dayId}
             onSelect={(id) => openHub(id)}
           />
-          <aside className="stop-panel">
-            <p className="stop-kicker">
-              {regionOf(active.region).kana} · {active.year}
-              {isIslandTrip(active.id) ? " · Island episode" : " · Mainland episode"}
-              {hasItinerary(active.id) ? " · Detailed ride" : ""}
-            </p>
-            <h3>{active.name}</h3>
-            <p className="stop-pref">{active.prefecture}</p>
-            <p className="stop-summary">{active.summary}</p>
-            <JumpNotes stopId={active.id} />
-            <ul className="chips">
-              {active.highlights.map((h) => (
-                <li key={h}>{h}</li>
-              ))}
-            </ul>
-            <p className="stop-ep">
-              Episode: <em>{active.episode}</em>
-              {active.kmHint ? ` · ~${active.kmHint} km` : ""}
-            </p>
+          <aside className={itinerary ? "stop-panel is-detail" : "stop-panel"}>
+            <div className="stop-head">
+              <p className="stop-kicker">
+                {regionOf(active.region).kana} · {active.year}
+                {isIslandTrip(active.id) ? " · Island episode" : " · Mainland episode"}
+                {hasItinerary(active.id) ? " · Detailed ride" : ""}
+              </p>
+              <h3>{active.name}</h3>
+              <p className="stop-pref">{active.prefecture}</p>
+              <p className="stop-ep">
+                Episode: <em>{active.episode}</em>
+                {active.kmHint ? ` · ~${active.kmHint} km` : ""}
+              </p>
             {hasItinerary(active.id) ? (
               <div className="detail-toggle">
                 <button
@@ -288,10 +282,12 @@ export default function App() {
                 >
                   All rides
                 </button>
-              </div>
-            ) : null}
-            {itinerary ? (
-              <div className="itinerary">
+                </div>
+              ) : null}
+            </div>
+            <div className="stop-body">
+              {itinerary ? (
+                <div className="itinerary">
                 <p className="muted tight">{itinerary.disclaimer}</p>
                 {itinerary.officialRoutes.length > 0 ? (
                   <p className="official-chip">
@@ -353,41 +349,56 @@ export default function App() {
                     ))}
                 </ol>
               </div>
-            ) : null}
-            {active.vodId ? (
-              <a
-                className="btn primary slim"
-                href={`https://www3.nhk.or.jp/nhkworld/en/shows/${active.vodId}/`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Watch this ride
-              </a>
-            ) : (
-              <p className="muted">This segment is not on NHK WORLD VOD right now — availability rotates.</p>
-            )}
-            <ol className="stop-list">
-              {list.map((stop, i) => (
-                <li key={stop.id}>
-                  <button
-                    className={stop.id === active.id ? "stop-row on" : "stop-row"}
-                    onClick={() => openHub(stop.id)}
-                  >
-                    <span className="idx">{String(i + 1).padStart(2, "0")}</span>
-                    <span>
-                      <strong>
-                        {stop.name}
-                        {hasItinerary(stop.id) ? <em className="route-mark"> route</em> : null}
-                        {isIslandTrip(stop.id) ? <em className="island-mark"> island</em> : null}
-                      </strong>
-                      <small>
-                        {stop.prefecture} · {stop.year}
-                      </small>
-                    </span>
-                  </button>
-                </li>
-              ))}
-            </ol>
+              ) : (
+                <>
+                  <p className="stop-summary">{active.summary}</p>
+                  <JumpNotes stopId={active.id} />
+                  <ul className="chips">
+                    {active.highlights.map((h) => (
+                      <li key={h}>{h}</li>
+                    ))}
+                  </ul>
+                  <ol className="stop-list">
+                    {list.map((stop, i) => (
+                      <li key={stop.id}>
+                        <button
+                          className={stop.id === active.id ? "stop-row on" : "stop-row"}
+                          onClick={() => openHub(stop.id)}
+                        >
+                          <span className="idx">{String(i + 1).padStart(2, "0")}</span>
+                          <span>
+                            <strong>
+                              {stop.name}
+                              {hasItinerary(stop.id) ? <em className="route-mark"> route</em> : null}
+                              {isIslandTrip(stop.id) ? <em className="island-mark"> island</em> : null}
+                            </strong>
+                            <small>
+                              {stop.prefecture} · {stop.year}
+                            </small>
+                          </span>
+                        </button>
+                      </li>
+                    ))}
+                  </ol>
+                </>
+              )}
+            </div>
+            <div className="stop-foot">
+              {active.vodId ? (
+                <a
+                  className="btn primary slim"
+                  href={`https://www3.nhk.or.jp/nhkworld/en/shows/${active.vodId}/`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Watch this ride
+                </a>
+              ) : (
+                <p className="muted">
+                  This segment is not on NHK WORLD VOD right now — availability rotates.
+                </p>
+              )}
+            </div>
           </aside>
         </div>
       </section>
