@@ -47,8 +47,9 @@ img {
   top: 0;
   z-index: 20;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 1.5rem;
+  gap: 0.75rem 1.5rem;
   padding: 0.85rem 1.5rem;
   background: rgba(243, 238, 228, 0.92);
   backdrop-filter: blur(12px);
@@ -766,8 +767,20 @@ blockquote cite {
     grid-template-columns: 1fr;
   }
 
+  .nav {
+    padding: 0.75rem 1.1rem;
+  }
+
   .nav nav {
-    display: none;
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 0;
+    flex: 1 1 100%;
+    gap: 0.65rem 1rem;
+  }
+
+  .nav-cta {
+    margin-left: auto;
   }
 
   .map-shell,
