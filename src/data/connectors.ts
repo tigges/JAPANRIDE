@@ -144,18 +144,18 @@ const spineKinds: [string, string, JumpKind, string][] = [
   ["oita", "nagasaki", "ride", "Across Kyushu (Goto is a ferry spur)"],
   ["nagasaki", "kumamoto", "ride", "East to Aso"],
   ["kumamoto", "miyazaki", "ride", "Caldera to the mythic gorge"],
-  ["miyazaki", "kagoshima", "ride", "Last mainland stage"],
+  ["miyazaki", "kagoshima", "ride", "Last mainland episode hop"],
 ];
 
 const islandAccess: [string, string, JumpKind, string][] = [
-  ["niigata", "sado", "ferry", "Sado Island package — not a spine stage"],
-  ["izu", "niijima", "ferry", "Tokyo islands package from Izu"],
-  ["nagasaki", "goto", "ferry", "Goto package from Nagasaki"],
+  ["niigata", "sado", "ferry", "Own island episode, not a consecutive mainland hop"],
+  ["izu", "niijima", "ferry", "Tokyo islands episode from Izu"],
+  ["nagasaki", "goto", "ferry", "Goto episode from Nagasaki"],
   ["kagoshima", "yakushima", "ferry", "Yakushima / Tanegashima from Satsuma"],
   ["kagoshima", "amami", "flight", "Amami as its own fly-in loop"],
   ["kagoshima", "okinawa", "flight", "Okinawa Honto as its own fly-in loop"],
-  ["okinawa", "miyako", "flight", "Miyako package from Naha"],
-  ["okinawa", "yaeyama", "flight", "Yaeyama package from Naha"],
+  ["okinawa", "miyako", "flight", "Miyako episode from Naha"],
+  ["okinawa", "yaeyama", "flight", "Yaeyama episode from Naha"],
 ];
 
 function toJumps(rows: [string, string, JumpKind, string][], islandAccessFlag: boolean): TourJump[] {
