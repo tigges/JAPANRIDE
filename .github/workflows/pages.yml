@@ -1,3 +1,6 @@
+# Publishes dist to https://tigges.github.io/JAPANRIDE/
+# Repo Settings → Pages → Source must be "GitHub Actions".
+# "Deploy from a branch" (main /) serves unbuilt index.html and the site is blank.
 name: Deploy GitHub Pages
 
 on:

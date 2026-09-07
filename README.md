@@ -16,6 +16,16 @@ npm run dev
 
 Open http://localhost:5173
 
+## GitHub Pages
+
+[https://tigges.github.io/JAPANRIDE/](https://tigges.github.io/JAPANRIDE/) is a Vite app. It only works if GitHub Pages deploys the **built** `dist` from `.github/workflows/pages.yml`.
+
+Repo **Settings → Pages → Build and deployment → Source** must be **GitHub Actions**, not “Deploy from a branch” (`main` /). Branch deploy publishes the unbuilt `index.html` (`/src/main.tsx`), which the browser cannot run — a white screen.
+
+After switching to GitHub Actions, re-run the **Deploy GitHub Pages** workflow or push to `main`. The workflow already sets `BASE_PATH=/JAPANRIDE/`.
+
+Until that setting is GitHub Actions, use [https://japanride.pages.dev/](https://japanride.pages.dev/).
+
 ## What it maps
 
 Nine chapters from Shiretoko to Yaeyama, drawn from twelve years of rides (Hokkaido, Tohoku, Hokuriku, Kanto, Alps & Fuji, Kansai & Kii, Seto & San'in, Kyushu, Nansei Islands). The **land spine** ends at Kagoshima. Southwestern and other island episodes (Sado, Niijima, Goto, Yakushima, Amami, Okinawa, Miyako, Yaeyama) are separate packages reached by ferry or flight. Current NHK WORLD VOD episodes are linked out so you can watch from the map.
