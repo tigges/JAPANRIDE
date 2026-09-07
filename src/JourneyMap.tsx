@@ -4,7 +4,14 @@ import "leaflet/dist/leaflet.css";
 import { basemaps, type BasemapId } from "./data/basemap";
 import { itineraryOf } from "./data/itineraries";
 import { officialRouteOf } from "./data/officialRoutes";
-import { regionOf, regions, stops, type RegionId, type Stop } from "./data/journey";
+import {
+  JUMP_KINDS,
+  JUMP_STYLE,
+  hubOf,
+  isIslandTrip,
+  jumpsForVisible,
+} from "./data/connectors";
+import { regionOf, stops, type RegionId, type Stop } from "./data/journey";
 import { SEGMENT_STYLE, type Itinerary, type RideDay } from "./data/schema";
 
 type Props = {
@@ -140,27 +147,40 @@ export default function JourneyMap({
     }
 
     const shown = visibleStops(regionFilter);
-    const latlngs = shown.map((s) => L.latLng(s.lat, s.lng));
+    const shownIds = new Set(shown.map((s) => s.id));
 
-    L.polyline(latlngs, {
-      color: "#c4452d",
-      weight: 3,
-      opacity: 0.85,
-      dashArray: "7 8",
-    }).addTo(layer);
+    for (const jump of jumpsForVisible(shownIds)) {
+      const from = hubOf(jump.from);
+      const to = hubOf(jump.to);
+      if (!from || !to) continue;
+      const style = JUMP_STYLE[jump.kind];
+      L.polyline(
+        [L.latLng(from.lat, from.lng), L.latLng(to.lat, to.lng)],
+        {
+          color: style.color,
+          weight: style.weight,
+          opacity: jump.islandAccess ? 0.7 : 0.9,
+          dashArray: style.dash,
+          lineCap: "round",
+        },
+      ).addTo(layer);
+    }
 
     for (const stop of shown) {
       const region = regionOf(stop.region);
       const isActive = stop.id === activeId;
+      const island = isIslandTrip(stop.id);
       const marker = L.circleMarker([stop.lat, stop.lng], {
-        radius: isActive ? 9 : 6,
-        color: "#1a1814",
-        weight: isActive ? 2 : 1,
-        fillColor: isActive ? "#c4452d" : region.color,
+        radius: isActive ? 9 : island ? 7 : 6,
+        color: island ? "#3d5c4a" : "#1a1814",
+        weight: isActive ? 2 : island ? 2 : 1,
+        fillColor: isActive ? "#c4452d" : island ? "#f3eee4" : region.color,
         fillOpacity: 1,
       });
       marker.bindTooltip(
-        `<strong>${stop.name}</strong><br/>${stop.prefecture} · ${stop.year}`,
+        `<strong>${stop.name}</strong><br/>${stop.prefecture} · ${stop.year}${
+          island ? "<br/>Island trip" : ""
+        }`,
         { direction: "top", opacity: 0.95 },
       );
       marker.on("click", () => onSelectRef.current(stop.id));
@@ -219,8 +239,10 @@ export default function JourneyMap({
         }
       />
       <div className="map-legend">
-        {legendKinds
-          ? legendKinds.map((kind) => (
+        {legendKinds ? (
+          <>
+            <p className="map-legend-title">Day segments</p>
+            {legendKinds.map((kind) => (
               <span key={kind} className="legend-item">
                 <i
                   style={{
@@ -230,19 +252,29 @@ export default function JourneyMap({
                 />
                 {SEGMENT_STYLE[kind].label}
               </span>
-            ))
-          : regions.map((r) => (
-              <span key={r.id} className="legend-item">
-                <i style={{ background: r.color }} />
-                {mapLang === "en" ? r.name : r.kana}
+            ))}
+            {itinerary && itinerary.officialRoutes.length > 0 ? (
+              <span className="legend-item">
+                <i style={{ background: "#2f6f6a", width: 14, borderRadius: 2 }} />
+                Official cycle route
+              </span>
+            ) : null}
+          </>
+        ) : (
+          <>
+            <p className="map-legend-title">Tour jumps</p>
+            {JUMP_KINDS.map((kind) => (
+              <span key={kind} className="legend-item">
+                <i className="legend-line" style={{ background: JUMP_STYLE[kind].color }} />
+                {JUMP_STYLE[kind].label}
               </span>
             ))}
-        {itinerary && itinerary.officialRoutes.length > 0 ? (
-          <span className="legend-item">
-            <i style={{ background: "#2f6f6a", width: 14, borderRadius: 2 }} />
-            Official cycle route
-          </span>
-        ) : null}
+            <span className="legend-item">
+              <i className="legend-island" />
+              Island trip
+            </span>
+          </>
+        )}
       </div>
     </div>
   );

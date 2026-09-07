@@ -3,6 +3,12 @@ import JourneyMap from "./JourneyMap";
 import { MAP_LANG_KEY, basemaps, isBasemapId, type BasemapId } from "./data/basemap";
 import { hasItinerary, itineraryOf } from "./data/itineraries";
 import { officialRouteOf } from "./data/officialRoutes";
+import {
+  JUMP_STYLE,
+  isIslandTrip,
+  jumpsTouching,
+  type TourJump,
+} from "./data/connectors";
 import { MATCH_LABEL, SEGMENT_STYLE } from "./data/schema";
 import {
   NHK_SHOW,
@@ -17,6 +23,35 @@ import { heroImages, vodEpisodes } from "./data/vod";
 
 function formatMins(sec: number): string {
   return `${Math.round(sec / 60)} min`;
+}
+
+function hubName(id: string): string {
+  return stops.find((s) => s.id === id)?.name ?? id;
+}
+
+function JumpNotes({ stopId }: { stopId: string }) {
+  const { inbound, outbound } = jumpsTouching(stopId);
+  if (inbound.length === 0 && outbound.length === 0) return null;
+
+  function row(jump: TourJump, direction: "from" | "to", otherId: string) {
+    const style = JUMP_STYLE[jump.kind];
+    return (
+      <li key={`${direction}-${jump.id}`}>
+        <i style={{ background: style.color }} />
+        <span>
+          {style.label} {direction} {hubName(otherId)}
+          {jump.note ? ` — ${jump.note}` : ""}
+        </span>
+      </li>
+    );
+  }
+
+  return (
+    <ul className="jump-notes">
+      {inbound.map((jump) => row(jump, "from", jump.from))}
+      {outbound.map((jump) => row(jump, "to", jump.to))}
+    </ul>
+  );
 }
 
 export default function App() {
@@ -105,13 +140,15 @@ export default function App() {
           <p className="eyebrow">Mapped from NHK WORLD-JAPAN · Cycle Around Japan</p>
           <h1>
             One island chain.
-            <em> One saddle. </em>
-            Twelve years of hidden Japan.
+            <em> Many NHK tours. </em>
+            One future ride of our own.
           </h1>
           <p className="lede">
-            From the ice edge of Shiretoko to the coral of Yaeyama, every Cycle Around Japan
-            ride is stitched here into a single north-to-south journey — locals, crafts, onsen,
-            and the roads between.
+            Cycle Around Japan is a library of tours, not one GPS line. This unofficial
+            companion maps a land spine from Shiretoko to Kagoshima, then the island
+            trips you reach by ferry or flight — so a future original JapanRide can
+            borrow the geography without pretending the series was a single week in
+            the saddle.
           </p>
           <div className="hero-actions">
             <a className="btn primary" href="#map">
@@ -149,12 +186,13 @@ export default function App() {
 
       <section className="map-section" id="map">
         <div className="section-head">
-          <p className="eyebrow">The grand traverse</p>
-          <h2>Shiretoko → Yaeyama</h2>
+          <p className="eyebrow">The catalog, not one GPS line</p>
+          <h2>Shiretoko → Kagoshima, plus island trips</h2>
           <p>
-            Filter a region, then click a hub. Six rides (Izu, Boso, Tsukuba, Biwa,
-            Shimanami, Goto) open a color-coded episode map — lake, pass, ferry, overnight.
-            The full-Japan line stays a story order, not a GPS trace.
+            Lines between hubs are color-coded jumps: vermillion ride, gold train,
+            purple ferry, grey flight. Island packages (Sado, Niijima, Goto, Yakushima,
+            Amami, Okinawa, Miyako, Yaeyama) hang off gateways — they are not stages of
+            the land spine. Six rides still open a color-coded episode map.
           </p>
         </div>
 
@@ -205,11 +243,13 @@ export default function App() {
           <aside className="stop-panel">
             <p className="stop-kicker">
               {regionOf(active.region).kana} · {active.year}
+              {isIslandTrip(active.id) ? " · Island trip" : " · Land spine"}
               {hasItinerary(active.id) ? " · Detailed ride" : ""}
             </p>
             <h3>{active.name}</h3>
             <p className="stop-pref">{active.prefecture}</p>
             <p className="stop-summary">{active.summary}</p>
+            <JumpNotes stopId={active.id} />
             <ul className="chips">
               {active.highlights.map((h) => (
                 <li key={h}>{h}</li>
@@ -331,6 +371,7 @@ export default function App() {
                       <strong>
                         {stop.name}
                         {hasItinerary(stop.id) ? <em className="route-mark"> route</em> : null}
+                        {isIslandTrip(stop.id) ? <em className="island-mark"> island</em> : null}
                       </strong>
                       <small>
                         {stop.prefecture} · {stop.year}
@@ -346,8 +387,8 @@ export default function App() {
 
       <section className="chapters" id="chapters">
         <div className="section-head">
-          <p className="eyebrow">Nine chapters, one Japan</p>
-          <h2>How the episodes become a route</h2>
+          <p className="eyebrow">Nine chapters, two kinds of trip</p>
+          <h2>Land spine, then island packages</h2>
         </div>
         <div className="chapter-grid">
           {regions.map((region, i) => {
@@ -442,6 +483,14 @@ export default function App() {
               Several rides start at the airport or the capital — Narita onto Boso, Tokyo to
               Izu-Oshima, Osaka into Nara's steepest road. You do not need a support van to
               copy the spirit of a chapter.
+            </p>
+          </article>
+          <article>
+            <h3>Island packages stay packages</h3>
+            <p>
+              Sado, the Izu islands, Goto, Yakushima, Amami, and the Ryukyus are their
+              own NHK trips — ferry or flight from a gateway, then a loop. They are
+              inspiration for later, not stages of a land tour that ends at Kagoshima.
             </p>
           </article>
         </div>

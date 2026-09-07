@@ -106,15 +106,16 @@ export const regions: Region[] = [
     order: 9,
     name: "Nansei Islands",
     kana: "南西諸島",
-    tagline: "Yakushima cedars to Yaeyama coral — Japan's long southern fade.",
+    tagline: "Separate NHK island packages — Yakushima cedars to Yaeyama coral.",
     color: "#1f6b62",
   },
 ];
 
 /**
- * A single north-to-south Japan journey stitched from Cycle Around Japan
- * episode locations (2014–2026). Coordinates are representative ride hubs,
- * not GPS traces. Summaries are paraphrased from NHK WORLD-JAPAN listings.
+ * Cycle Around Japan episode hubs in catalog order (north to south).
+ * The land spine ends at Kagoshima; island packages are separate trips
+ * (see connectors.ts). Coordinates are representative hubs, not GPS traces.
+ * Summaries are paraphrased from NHK WORLD-JAPAN listings.
  */
 export const stops: Stop[] = [
   {

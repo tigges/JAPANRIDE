@@ -334,6 +334,27 @@ img {
   display: inline-block;
 }
 
+.legend-item i.legend-line {
+  width: 16px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.legend-item i.legend-island {
+  background: #f3eee4;
+  border: 2px solid #3d5c4a;
+  box-sizing: border-box;
+}
+
+.map-legend-title {
+  flex-basis: 100%;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0;
+}
+
 .stop-panel {
   background: #fffdf8;
   border-radius: 18px;
@@ -435,6 +456,40 @@ img {
   text-transform: uppercase;
   color: var(--moss);
   margin-left: 0.35rem;
+}
+
+.island-mark {
+  font-style: normal;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #3d5c4a;
+  margin-left: 0.35rem;
+}
+
+.jump-notes {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.jump-notes li {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.jump-notes i {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  margin-top: 0.28rem;
+  flex-shrink: 0;
 }
 
 .detail-toggle,
@@ -642,7 +697,7 @@ img {
 
 .notes {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 }
 
