@@ -21,3 +21,7 @@ Open http://localhost:5173
 Nine chapters from Shiretoko to Yaeyama, drawn from twelve years of rides (Hokkaido, Tohoku, Hokuriku, Kanto, Alps & Fuji, Kansai & Kii, Seto & San'in, Kyushu, Nansei Islands). Current NHK WORLD VOD episodes are linked out so you can watch from the map.
 
 The map has **English** (Esri World Topo) and **日本語** (GSI pale) label modes. English is the default.
+
+Six hubs open a **color-coded episode map** (Izu, Boso, Tsukuba, Biwa, Shimanami, Goto): lake, coast, pass, island, ferry, flight, overnight. Official National Cycle Routes show as a teal underlay where the ride is on them. The full-Japan dashed line stays a story spine.
+
+Later, an original **JapanRide** traverse can sit as its own layer (`japanride`) on the official network, optionally splicing NHK episode days as detours — not as a replacement for this overview.

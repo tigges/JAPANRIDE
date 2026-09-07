@@ -428,6 +428,78 @@ img {
   min-width: 1.8rem;
 }
 
+.route-mark {
+  font-style: normal;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--moss);
+  margin-left: 0.35rem;
+}
+
+.detail-toggle,
+.day-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.8rem 0 0.5rem;
+}
+
+.itinerary {
+  margin-top: 0.4rem;
+}
+
+.muted.tight {
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+}
+
+.official-chip {
+  font-size: 0.75rem;
+  margin: 0.45rem 0 0.2rem;
+  color: var(--moss);
+}
+
+.official-chip.off {
+  color: var(--muted);
+}
+
+.day-list {
+  list-style: none;
+  margin: 0.4rem 0 0.8rem;
+  font-size: 0.82rem;
+}
+
+.day-list > li {
+  margin-bottom: 0.7rem;
+}
+
+.day-list ul {
+  list-style: none;
+  margin-top: 0.3rem;
+}
+
+.day-list ul li {
+  display: flex;
+  gap: 0.45rem;
+  align-items: flex-start;
+  margin: 0.28rem 0;
+}
+
+.day-list i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-top: 0.4rem;
+  flex-shrink: 0;
+}
+
+.day-list small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
 .chapter-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

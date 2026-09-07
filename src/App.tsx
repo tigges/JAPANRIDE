@@ -1,6 +1,9 @@
 import { useMemo, useState } from "react";
 import JourneyMap from "./JourneyMap";
 import { MAP_LANG_KEY, basemaps, isBasemapId, type BasemapId } from "./data/basemap";
+import { hasItinerary, itineraryOf } from "./data/itineraries";
+import { officialRouteOf } from "./data/officialRoutes";
+import { MATCH_LABEL, SEGMENT_STYLE } from "./data/schema";
 import {
   NHK_SHOW,
   regionOf,
@@ -27,6 +30,8 @@ export default function App() {
       return "en";
     }
   });
+  const [detail, setDetail] = useState(false);
+  const [dayId, setDayId] = useState<string | "all">("all");
 
   function chooseMapLang(id: BasemapId) {
     setMapLang(id);
@@ -42,17 +47,34 @@ export default function App() {
     [regionFilter],
   );
   const active = list.find((s) => s.id === activeId) ?? list[0] ?? stops[0]!;
+  const itinerary = detail ? itineraryOf(active.id) : undefined;
   const japanVod = vodEpisodes.filter((e) => e.japan);
   const taiwanVod = vodEpisodes.filter((e) => !e.japan);
 
-  function pickStop(id: string) {
+  function openHub(id: string, asDetail = hasItinerary(id)) {
     const stop = stops.find((s) => s.id === id);
     if (!stop) return;
     if (regionFilter !== "all" && stop.region !== regionFilter) {
       setRegionFilter("all");
     }
     setActiveId(id);
+    setDetail(asDetail);
+    setDayId("all");
     document.getElementById("map")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function pickStop(id: string) {
+    openHub(id);
+  }
+
+  function chooseRegion(id: RegionId | "all") {
+    setRegionFilter(id);
+    setDetail(false);
+    setDayId("all");
+    if (id !== "all") {
+      const first = stopsByRegion(id)[0];
+      if (first) setActiveId(first.id);
+    }
   }
 
   return (
@@ -130,8 +152,9 @@ export default function App() {
           <p className="eyebrow">The grand traverse</p>
           <h2>Shiretoko → Yaeyama</h2>
           <p>
-            Filter a region, then click a hub. The line is a story order — north to south —
-            not a GPS trace. Ferries and trains fill the gaps, the way the series always has.
+            Filter a region, then click a hub. Six rides (Izu, Boso, Tsukuba, Biwa,
+            Shimanami, Goto) open a color-coded episode map — lake, pass, ferry, overnight.
+            The full-Japan line stays a story order, not a GPS trace.
           </p>
         </div>
 
@@ -139,7 +162,7 @@ export default function App() {
           <div className="region-pills" role="tablist" aria-label="Filter journey by region">
             <button
               className={regionFilter === "all" ? "pill on" : "pill"}
-              onClick={() => setRegionFilter("all")}
+              onClick={() => chooseRegion("all")}
             >
               Full Japan
             </button>
@@ -147,11 +170,7 @@ export default function App() {
               <button
                 key={r.id}
                 className={regionFilter === r.id ? "pill on" : "pill"}
-                onClick={() => {
-                  setRegionFilter(r.id);
-                  const first = stopsByRegion(r.id)[0];
-                  if (first) setActiveId(first.id);
-                }}
+                onClick={() => chooseRegion(r.id)}
               >
                 {r.name}
               </button>
@@ -179,11 +198,14 @@ export default function App() {
             activeId={active.id}
             regionFilter={regionFilter}
             mapLang={mapLang}
-            onSelect={setActiveId}
+            detail={detail}
+            dayId={dayId}
+            onSelect={(id) => openHub(id)}
           />
           <aside className="stop-panel">
             <p className="stop-kicker">
               {regionOf(active.region).kana} · {active.year}
+              {hasItinerary(active.id) ? " · Detailed ride" : ""}
             </p>
             <h3>{active.name}</h3>
             <p className="stop-pref">{active.prefecture}</p>
@@ -197,6 +219,94 @@ export default function App() {
               Episode: <em>{active.episode}</em>
               {active.kmHint ? ` · ~${active.kmHint} km` : ""}
             </p>
+            {hasItinerary(active.id) ? (
+              <div className="detail-toggle">
+                <button
+                  type="button"
+                  className={detail ? "pill on" : "pill"}
+                  onClick={() => {
+                    setDetail(true);
+                    setDayId("all");
+                  }}
+                >
+                  Episode map
+                </button>
+                <button
+                  type="button"
+                  className={!detail ? "pill on" : "pill"}
+                  onClick={() => {
+                    setDetail(false);
+                    setDayId("all");
+                  }}
+                >
+                  Japan overview
+                </button>
+              </div>
+            ) : null}
+            {itinerary ? (
+              <div className="itinerary">
+                <p className="muted tight">{itinerary.disclaimer}</p>
+                {itinerary.officialRoutes.length > 0 ? (
+                  <p className="official-chip">
+                    {itinerary.officialRoutes.map((id) => officialRouteOf(id).name).join(" · ")}
+                  </p>
+                ) : (
+                  <p className="official-chip off">{MATCH_LABEL.off}</p>
+                )}
+                <div className="day-pills" role="tablist" aria-label="Episode days">
+                  <button
+                    className={dayId === "all" ? "pill on" : "pill"}
+                    onClick={() => setDayId("all")}
+                  >
+                    All days
+                  </button>
+                  {itinerary.days.map((d) => (
+                    <button
+                      key={d.id}
+                      className={dayId === d.id ? "pill on" : "pill"}
+                      onClick={() => setDayId(d.id)}
+                    >
+                      {d.label}
+                    </button>
+                  ))}
+                </div>
+                <ol className="day-list">
+                  {itinerary.days
+                    .filter((d) => dayId === "all" || d.id === dayId)
+                    .map((d) => (
+                      <li key={d.id}>
+                        <strong>
+                          {d.label} — {d.title}
+                        </strong>
+                        <ul>
+                          {d.segmentIds.map((sid) => {
+                            const seg = itinerary.segments.find((s) => s.id === sid);
+                            if (!seg) return null;
+                            const from = itinerary.waypoints.find((w) => w.id === seg.from);
+                            const to = itinerary.waypoints.find((w) => w.id === seg.to);
+                            const style = SEGMENT_STYLE[seg.kind];
+                            return (
+                              <li key={seg.id}>
+                                <i style={{ background: style.color }} />
+                                <span>
+                                  {seg.kind === "overnight"
+                                    ? `Overnight in ${from?.name ?? ""}`
+                                    : `${from?.name ?? ""} → ${to?.name ?? ""}`}
+                                  <small>
+                                    {style.label}
+                                    {seg.km ? ` · ~${seg.km} km` : ""} · {MATCH_LABEL[seg.official]}
+                                    {seg.note ? ` · ${seg.note}` : ""}
+                                  </small>
+                                </span>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </li>
+                    ))}
+                </ol>
+              </div>
+            ) : null}
             {active.vodId ? (
               <a
                 className="btn primary slim"
@@ -214,11 +324,14 @@ export default function App() {
                 <li key={stop.id}>
                   <button
                     className={stop.id === active.id ? "stop-row on" : "stop-row"}
-                    onClick={() => setActiveId(stop.id)}
+                    onClick={() => openHub(stop.id)}
                   >
                     <span className="idx">{String(i + 1).padStart(2, "0")}</span>
                     <span>
-                      <strong>{stop.name}</strong>
+                      <strong>
+                        {stop.name}
+                        {hasItinerary(stop.id) ? <em className="route-mark"> route</em> : null}
+                      </strong>
                       <small>
                         {stop.prefecture} · {stop.year}
                       </small>

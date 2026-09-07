@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { basemaps } from "./basemap";
 import { japanBounds, regionOf, regions, stops, stopsByRegion } from "./journey";
+import { itineraries } from "./itineraries";
+import { MATCH_LABEL, SEGMENT_STYLE } from "./schema";
 import { vodEpisodes } from "./vod";
 
 describe("grand Japan journey", () => {
@@ -83,5 +85,51 @@ describe("basemap", () => {
     expect(basemaps.ja.label).toBe("日本語");
     expect(basemaps.en.url.toLowerCase()).not.toContain("carto");
     expect(basemaps.ja.url.toLowerCase()).not.toContain("carto");
+  });
+});
+
+describe("episode itineraries", () => {
+  it("maps the six pilot hubs with days, waypoints, and segment kinds", () => {
+    expect(itineraries.map((i) => i.stopId).sort()).toEqual(
+      ["biwa", "boso", "goto", "ibaraki", "izu", "shimanami"].sort(),
+    );
+    for (const ride of itineraries) {
+      expect(ride.layer).toBe("nhk");
+      expect(ride.days.length).toBeGreaterThanOrEqual(2);
+      expect(ride.waypoints.length).toBeGreaterThanOrEqual(4);
+      const wpIds = new Set(ride.waypoints.map((w) => w.id));
+      expect(wpIds.size).toBe(ride.waypoints.length);
+      for (const seg of ride.segments) {
+        expect(wpIds.has(seg.from)).toBe(true);
+        expect(wpIds.has(seg.to)).toBe(true);
+        expect(SEGMENT_STYLE[seg.kind]).toBeTruthy();
+        expect(MATCH_LABEL[seg.official]).toBeTruthy();
+        expect(seg.path.length).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  it("keeps NHK itineraries in the Japan bounding box", () => {
+    for (const ride of itineraries) {
+      for (const wp of ride.waypoints) {
+        expect(wp.lat).toBeGreaterThanOrEqual(japanBounds.minLat);
+        expect(wp.lat).toBeLessThanOrEqual(japanBounds.maxLat);
+        expect(wp.lng).toBeGreaterThanOrEqual(japanBounds.minLng);
+        expect(wp.lng).toBeLessThanOrEqual(japanBounds.maxLng);
+      }
+    }
+  });
+
+  it("shows on / mixed / off official-route examples", () => {
+    const shima = itineraries.find((i) => i.stopId === "shimanami")!;
+    const goto = itineraries.find((i) => i.stopId === "goto")!;
+    const boso = itineraries.find((i) => i.stopId === "boso")!;
+    expect(shima.segments.filter((s) => s.kind !== "overnight").every((s) => s.official === "on")).toBe(
+      true,
+    );
+    expect(goto.officialRoutes).toEqual([]);
+    expect(goto.segments.every((s) => s.official === "off")).toBe(true);
+    expect(boso.segments.some((s) => s.official === "on")).toBe(true);
+    expect(boso.segments.some((s) => s.official === "off")).toBe(true);
   });
 });
