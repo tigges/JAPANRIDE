@@ -179,7 +179,7 @@ export default function JourneyMap({
       });
       marker.bindTooltip(
         `<strong>${stop.name}</strong><br/>${stop.prefecture} · ${stop.year}${
-          island ? "<br/>Island trip" : ""
+          island ? "<br/>Island episode" : ""
         }`,
         { direction: "top", opacity: 0.95 },
       );
@@ -234,8 +234,8 @@ export default function JourneyMap({
           itinerary
             ? `${itinerary.title} episode map`
             : mapLang === "en"
-              ? "Japan bike journey map, English labels"
-              : "Japan bike journey map, Japanese labels"
+              ? "Cycle Around Japan episode rides map, English labels"
+              : "Cycle Around Japan episode rides map, Japanese labels"
         }
       />
       <div className="map-legend">
@@ -262,7 +262,7 @@ export default function JourneyMap({
           </>
         ) : (
           <>
-            <p className="map-legend-title">Tour jumps</p>
+            <p className="map-legend-title">Between rides</p>
             {JUMP_KINDS.map((kind) => (
               <span key={kind} className="legend-item">
                 <i className="legend-line" style={{ background: JUMP_STYLE[kind].color }} />
@@ -271,7 +271,7 @@ export default function JourneyMap({
             ))}
             <span className="legend-item">
               <i className="legend-island" />
-              Island trip
+              Island episode
             </span>
           </>
         )}

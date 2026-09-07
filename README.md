@@ -1,10 +1,12 @@
 # JAPANRIDE
 
-A landing page that maps [NHK WORLD-JAPAN *Cycle Around Japan*](https://www3.nhk.or.jp/nhkworld/en/shows/cycle/) as a **library of tours**: a land spine from Shiretoko to Kagoshima, plus independent island trips.
+An unofficial companion that **maps and details the bicycle rides** from [NHK WORLD-JAPAN *Cycle Around Japan*](https://www3.nhk.or.jp/nhkworld/en/shows/cycle/), and links out so you can **watch each segment on the NHK site** when it is listed.
+
+Full Japan still shows **every episode hub** and **how you can get from one ride to the next** (ride, train, ferry, or flight). That catalog layout is not a grand tour of Japan — a continuous original traverse is a **separate project**.
 
 **Live:** [https://japanride.pages.dev/](https://japanride.pages.dev/)
 
-Episode titles, stills, and short descriptions come from the official catalog and listings. This site is an unofficial companion map, not affiliated with NHK.
+Episode titles, stills, and short descriptions come from the official catalog and listings. This site is not affiliated with NHK.
 
 ## Run
 
@@ -28,12 +30,10 @@ Until that setting is GitHub Actions, use [https://japanride.pages.dev/](https:/
 
 ## What it maps
 
-Nine chapters from Shiretoko to Yaeyama, drawn from twelve years of rides (Hokkaido, Tohoku, Hokuriku, Kanto, Alps & Fuji, Kansai & Kii, Seto & San'in, Kyushu, Nansei Islands). The **land spine** ends at Kagoshima. Southwestern and other island episodes (Sado, Niijima, Goto, Yakushima, Amami, Okinawa, Miyako, Yaeyama) are separate packages reached by ferry or flight. Current NHK WORLD VOD episodes are linked out so you can watch from the map.
+Nine chapters from Shiretoko to Yaeyama, drawn from twelve years of *Cycle Around Japan* rides (Hokkaido, Tohoku, Hokuriku, Kanto, Alps & Fuji, Kansai & Kii, Seto & San'in, Kyushu, Nansei Islands). **Full Japan** plots every hub. Island episodes (Sado, Niijima, Goto, Yakushima, Amami, Okinawa, Miyako, Yaeyama) hang off ferry or flight gateways so they stay distinct trips, not stages of one land tour.
 
 The map has **English** (Esri World Topo) and **日本語** (GSI pale) label modes. English is the default.
 
-Overview links between hubs are **color-coded jumps**: vermillion ride, gold train, purple ferry, grey flight — so the catalog does not look like one continuous GPS ride.
+Links between hubs are **color-coded hops**: vermillion ride, gold train, purple ferry, grey flight — how you could get from one NHK episode to another, not a single GPS line.
 
-Thirteen hubs open a **color-coded episode map** (Tokachi/Kushiro, Aomori, Toyama, Noto, Sado, Izu, Boso, Tsukuba, Biwa, Okayama, Shimanami, Oita, Goto): lake, coast, pass, island, ferry, flight, overnight. Official cycle routes show as a teal underlay where the ride is on them. Noto opens from both Kanazawa and Wajima.
-
-Later, an original **JapanRide** traverse can sit as its own layer (`japanride`) on the official network, optionally splicing NHK episode days as detours — not as a replacement for this overview.
+Thirteen hubs open a **color-coded episode map** (Tokachi/Kushiro, Aomori, Toyama, Noto, Sado, Izu, Boso, Tsukuba, Biwa, Okayama, Shimanami, Oita, Goto): lake, coast, pass, island, ferry, flight, overnight. Official cycle routes show as a teal underlay where the ride is on them. Noto opens from both Kanazawa and Wajima. **Watch this ride** opens the NHK WORLD page when that hub has a listed VOD id.

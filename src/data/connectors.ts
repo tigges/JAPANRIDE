@@ -10,15 +10,16 @@ export type TourJump = {
   to: string;
   kind: JumpKind;
   note: string;
-  /** Island packages hang off a gateway; they are not mainland spine. */
+  /** Island episodes hang off a gateway; they are not consecutive mainland hops. */
   islandAccess?: boolean;
 };
 
 export const JUMP_KINDS: JumpKind[] = ["ride", "train", "ferry", "flight"];
 
 /**
- * Mainland story spine — ends at Kagoshima. Southwestern (and other) island
- * episodes are separate trips reached by ferry or flight.
+ * Mainland hub sequence for drawing hops between neighboring NHK episodes.
+ * Ends at Kagoshima. Southwestern (and other) island episodes are separate
+ * NHK trips reached by ferry or flight — not a grand tour of Japan.
  */
 export const SPINE_IDS = [
   "shiretoko",
@@ -88,7 +89,7 @@ export const JUMP_STYLE: Record<
   JumpKind,
   { color: string; dash: string; label: string; weight: number }
 > = {
-  ride: { color: "#c4452d", dash: "7 8", label: "Ride between tours", weight: 3 },
+  ride: { color: "#c4452d", dash: "7 8", label: "Ride between episodes", weight: 3 },
   train: { color: "#c9a05a", dash: "2 8", label: "Train jump", weight: 3 },
   ferry: { color: "#6b5b95", dash: "8 7", label: "Ferry jump", weight: 3 },
   flight: { color: "#8a8680", dash: "1 10", label: "Flight jump", weight: 2 },
@@ -143,18 +144,18 @@ const spineKinds: [string, string, JumpKind, string][] = [
   ["oita", "nagasaki", "ride", "Across Kyushu (Goto is a ferry spur)"],
   ["nagasaki", "kumamoto", "ride", "East to Aso"],
   ["kumamoto", "miyazaki", "ride", "Caldera to the mythic gorge"],
-  ["miyazaki", "kagoshima", "ride", "Last mainland stage"],
+  ["miyazaki", "kagoshima", "ride", "Last mainland episode hop"],
 ];
 
 const islandAccess: [string, string, JumpKind, string][] = [
-  ["niigata", "sado", "ferry", "Sado Island package — not a spine stage"],
-  ["izu", "niijima", "ferry", "Tokyo islands package from Izu"],
-  ["nagasaki", "goto", "ferry", "Goto package from Nagasaki"],
+  ["niigata", "sado", "ferry", "Own island episode, not a consecutive mainland hop"],
+  ["izu", "niijima", "ferry", "Tokyo islands episode from Izu"],
+  ["nagasaki", "goto", "ferry", "Goto episode from Nagasaki"],
   ["kagoshima", "yakushima", "ferry", "Yakushima / Tanegashima from Satsuma"],
   ["kagoshima", "amami", "flight", "Amami as its own fly-in loop"],
   ["kagoshima", "okinawa", "flight", "Okinawa Honto as its own fly-in loop"],
-  ["okinawa", "miyako", "flight", "Miyako package from Naha"],
-  ["okinawa", "yaeyama", "flight", "Yaeyama package from Naha"],
+  ["okinawa", "miyako", "flight", "Miyako episode from Naha"],
+  ["okinawa", "yaeyama", "flight", "Yaeyama episode from Naha"],
 ];
 
 function toJumps(rows: [string, string, JumpKind, string][], islandAccessFlag: boolean): TourJump[] {

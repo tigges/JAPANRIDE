@@ -1,11 +1,11 @@
 /**
- * Shared geometry for every drawn journey.
+ * Shared geometry for drawn routes.
  *
- * Layers stay independent — do not merge into one polyline:
- * - `nhk`        reconstructed Cycle Around Japan episode days
+ * This site's product is the NHK episode layer. Layers stay independent —
+ * do not merge into one polyline:
+ * - `nhk`        reconstructed Cycle Around Japan episode days (this project)
  * - `network`    official cycle routes (National Cycle Routes, prefectural)
- * - `japanride`  a future original traverse that *rides the network* and may
- *                optionally splice NHK episode days as detours
+ * - `japanride`  reserved for a separate grand-tour project; not this site's focus
  *
  * Strava (later) is a popularity signal for choosing which official roads
  * to prefer, not a GPS layer we store until export/TOS is explicit.

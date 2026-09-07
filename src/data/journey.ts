@@ -106,16 +106,18 @@ export const regions: Region[] = [
     order: 9,
     name: "Nansei Islands",
     kana: "南西諸島",
-    tagline: "Separate NHK island packages — Yakushima cedars to Yaeyama coral.",
+    tagline: "NHK island episodes — Yakushima cedars to Yaeyama coral.",
     color: "#1f6b62",
   },
 ];
 
 /**
  * Cycle Around Japan episode hubs in catalog order (north to south).
- * The land spine ends at Kagoshima; island packages are separate trips
- * (see connectors.ts). Coordinates are representative hubs, not GPS traces.
- * Summaries are paraphrased from NHK WORLD-JAPAN listings.
+ * Mainland hubs are sequenced so Full Japan can draw hops between neighboring
+ * episodes; island episodes hang off ferry/flight gateways (see connectors.ts).
+ * That sequence is a catalog layout, not a grand tour. Coordinates are
+ * representative hubs, not GPS traces. Summaries are paraphrased from
+ * NHK WORLD-JAPAN listings.
  */
 export const stops: Stop[] = [
   {
