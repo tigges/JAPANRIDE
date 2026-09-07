@@ -192,7 +192,7 @@ export default function App() {
             Lines between hubs are color-coded jumps: vermillion ride, gold train,
             purple ferry, grey flight. Island packages (Sado, Niijima, Goto, Yakushima,
             Amami, Okinawa, Miyako, Yaeyama) hang off gateways — they are not stages of
-            the land spine. Six rides still open a color-coded episode map.
+            the land spine. Hubs marked route open a color-coded episode map.
           </p>
         </div>
 

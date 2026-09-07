@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { basemaps } from "./basemap";
 import { japanBounds, regionOf, regions, stops, stopsByRegion } from "./journey";
-import { itineraries } from "./itineraries";
+import { hasItinerary, itineraries, itineraryOf } from "./itineraries";
+import { officialRoutes } from "./officialRoutes";
 import { MATCH_LABEL, SEGMENT_STYLE } from "./schema";
 import {
   ISLAND_TRIP_IDS,
@@ -100,11 +101,33 @@ describe("basemap", () => {
 });
 
 describe("episode itineraries", () => {
-  it("maps the six pilot hubs with days, waypoints, and segment kinds", () => {
-    expect(itineraries.map((i) => i.stopId).sort()).toEqual(
-      ["biwa", "boso", "goto", "ibaraki", "izu", "shimanami"].sort(),
+  it("maps NHK hubs with days, waypoints, and segment kinds", () => {
+    const ids = itineraries.map((i) => i.stopId).sort();
+    expect(ids).toEqual(
+      [
+        "aomori",
+        "biwa",
+        "boso",
+        "goto",
+        "ibaraki",
+        "izu",
+        "kanazawa",
+        "kushiro",
+        "oita",
+        "okayama",
+        "sado",
+        "shimanami",
+        "toyama",
+      ].sort(),
     );
+    expect(itineraries.length).toBeGreaterThanOrEqual(13);
+    const itineraryIds = new Set(itineraries.map((i) => i.id));
+    expect(itineraryIds.size).toBe(itineraries.length);
     for (const ride of itineraries) {
+      expect(stops.some((s) => s.id === ride.stopId)).toBe(true);
+      for (const extra of ride.extraStopIds ?? []) {
+        expect(stops.some((s) => s.id === extra)).toBe(true);
+      }
       expect(ride.layer).toBe("nhk");
       expect(ride.days.length).toBeGreaterThanOrEqual(2);
       expect(ride.waypoints.length).toBeGreaterThanOrEqual(4);
@@ -118,6 +141,13 @@ describe("episode itineraries", () => {
         expect(seg.path.length).toBeGreaterThan(0);
       }
     }
+  });
+
+  it("opens the Noto ride from both Kanazawa and Wajima hubs", () => {
+    expect(hasItinerary("kanazawa")).toBe(true);
+    expect(hasItinerary("wajima")).toBe(true);
+    expect(itineraryOf("kanazawa")?.id).toBe("noto");
+    expect(itineraryOf("wajima")?.id).toBe("noto");
   });
 
   it("keeps NHK itineraries in the Japan bounding box", () => {
@@ -135,13 +165,33 @@ describe("episode itineraries", () => {
     const shima = itineraries.find((i) => i.stopId === "shimanami")!;
     const goto = itineraries.find((i) => i.stopId === "goto")!;
     const boso = itineraries.find((i) => i.stopId === "boso")!;
+    const sado = itineraries.find((i) => i.stopId === "sado")!;
+    const kushiro = itineraries.find((i) => i.stopId === "kushiro")!;
+    const toyama = itineraries.find((i) => i.stopId === "toyama")!;
     expect(shima.segments.filter((s) => s.kind !== "overnight").every((s) => s.official === "on")).toBe(
       true,
     );
     expect(goto.officialRoutes).toEqual([]);
     expect(goto.segments.every((s) => s.official === "off")).toBe(true);
+    expect(sado.officialRoutes).toEqual([]);
+    expect(sado.segments.every((s) => s.official === "off")).toBe(true);
     expect(boso.segments.some((s) => s.official === "on")).toBe(true);
     expect(boso.segments.some((s) => s.official === "off")).toBe(true);
+    expect(kushiro.segments.some((s) => s.official === "on" && s.officialRoute === "tokapuchi400")).toBe(
+      true,
+    );
+    expect(kushiro.segments.some((s) => s.official === "off")).toBe(true);
+    expect(toyama.segments.some((s) => s.official === "on" && s.officialRoute === "toyama-bay")).toBe(
+      true,
+    );
+    expect(toyama.segments.some((s) => s.official === "off")).toBe(true);
+  });
+
+  it("sketches Tokapuchi 400, Toyama Bay, and Yamanami underlays", () => {
+    for (const id of ["tokapuchi400", "toyama-bay", "yamanami"] as const) {
+      const route = officialRoutes.find((r) => r.id === id);
+      expect(route?.path.length).toBeGreaterThan(3);
+    }
   });
 });
 

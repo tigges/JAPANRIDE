@@ -34,7 +34,8 @@ export type OfficialRouteId =
   | "rinrin"
   | "pacific-coast"
   | "toyama-bay"
-  | "tokapuchi400";
+  | "tokapuchi400"
+  | "yamanami";
 
 export type WaypointKind = "start" | "place" | "overnight" | "end" | "gateway";
 
@@ -73,6 +74,8 @@ export type Itinerary = {
   id: string;
   layer: JourneyLayer;
   stopId: string;
+  /** Extra catalog hubs that should open this same episode map. */
+  extraStopIds?: string[];
   title: string;
   disclaimer: string;
   waypoints: Waypoint[];
